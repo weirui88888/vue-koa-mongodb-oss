@@ -1,3 +1,9 @@
+<!--
+ * @Description:
+ * @Autor: rui.wei
+ * @Date: 2019-11-14 19:15:39
+ * @Email: weirui@zhiketong.cn
+ -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>itc</title>
+    <title>聆听</title>
   </head>
   <body>
     <noscript>
@@ -13,5 +19,8 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <% for (let i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+      <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+    <% } %>
   </body>
 </html>

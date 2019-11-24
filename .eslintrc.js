@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Autor: rui.wei
+ * @Date: 2019-11-14 19:15:39
+ * @Email: weirui@zhiketong.cn
+ */
 module.exports = {
   root: true,
   env: {
@@ -8,8 +14,9 @@ module.exports = {
     '@vue/standard'
   ],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-console': 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    "camelcase": 0
   },
   parserOptions: {
     parser: 'babel-eslint'
