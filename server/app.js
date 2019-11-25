@@ -27,7 +27,7 @@ app.use(check_token)
 
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(path.resolve(__dirname, '/public')))
+app.use(require('koa-static')(path.resolve(__dirname, './public')))
 
 // logger
 app.use(async (ctx, next) => {

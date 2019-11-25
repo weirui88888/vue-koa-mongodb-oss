@@ -13,6 +13,15 @@ module.exports = {
   async addRecord (ctx, next) {
     // 转义，防止xss攻击
     let { title, type, detail } = ctx.request.body
+    let files = ctx.request.files
+    let img = []
+    files.forEach((elem, index) => {
+      img.push({
+        name: elem.originalname,
+        url: 'http://localhost:3000/images/' + elem.originalname
+        // url: 'http://123.56.119.218/server/public/images/' + elem.originalname
+      })
+    })
     title = xss(title)
     detail = xss(detail)
     try {
@@ -22,7 +31,9 @@ module.exports = {
         avatar: ctx.avatar,
         detail,
         title,
-        type
+        type,
+        img,
+        view: 0
       })
       let res = await record.save()
       if (res._id != null) {
@@ -50,7 +61,7 @@ module.exports = {
     let options = {
       skip: Number((pageNum - 1) * pageSize),
       limit: Number(pageSize),
-      sort: { 'create_time': '-1' }
+      sort: { 'view': '-1' }
     }
     let queryParam = {}
     if (type) {
@@ -61,12 +72,6 @@ module.exports = {
     }
     let res = await Record.find(queryParam, null, options)
     let total = await Record.countDocuments(queryParam, null, options)
-    // for (let user of res) {
-    //   let { user_id = '' } = user
-    //   let dataUser = await User.find({ _id: user_id })
-    //   // user.creater = dataUser[0].user_name
-    //   user.avatar = dataUser[0].avatar
-    // }
     ctx.body = {
       code: 200,
       data: {
@@ -102,7 +107,8 @@ module.exports = {
   async getRecordById (ctx, next) {
     let _id = ctx.params.id
     try {
-      let res = await Record.findOne({ _id }, { detail: true, title: true, type: true, _id: false })
+      // let res = await Record.findOne({ _id }, { detail: true, title: true, type: true, _id: false, img: true })
+      let res = await Record.findOneAndUpdate({ _id }, { $inc: { 'view': 1 } }, { returnNewDocument: true })
       ctx.body = {
         code: 200,
         msg: '获取详情成功!',
@@ -117,14 +123,23 @@ module.exports = {
   },
   async updateRecordById (ctx, next) {
     let { id, detail, type, title } = ctx.request.body
-    console.log(detail)
+    let files = ctx.request.files
+    let img = []
+    files.forEach((elem, index) => {
+      img.push({
+        name: elem.originalname,
+        url: 'http://localhost:3000/images/' + elem.originalname
+        // url: 'http://123.56.119.218/server/public/images/' + elem.originalname
+      })
+    })
     try {
       let res = await Record.findOneAndUpdate({ _id: id }, {
         $set: {
           detail,
           type,
           title
-        }
+        },
+        $addToSet: { img }
       }, { new: true })
       if (res !== null) {
         ctx.body = {

@@ -8,7 +8,13 @@ import instance from '../request/axios'
 
 // 添加记录
 const addRecord = (data) => {
-  return instance.post('/api/record/add', data)
+  return instance.request(
+    {
+      url: '/api/record/add',
+      data: data,
+      method: 'post'
+    }
+  )
 }
 
 // 查看记录

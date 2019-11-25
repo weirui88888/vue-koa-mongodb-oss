@@ -45,6 +45,8 @@ let recordSchema = new Schema({
     type: String,
     default: Date.now
   },
+  img: Array,
+  view: 0,
   creater: String,
   // TODO:这里很重要，需要什么记得加上
   avatar: String,

@@ -1,13 +1,14 @@
-<!--
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-18 11:20:56
- * @Email: weirui@zhiketong.cn
- -->
 <template>
   <div class="edit-wrap">
     <div class="edit-header">
-      <el-page-header @back="goBack" :content="title"></el-page-header>
+      <el-page-header @back="goBack">
+          <template slot="content">
+            {{title}}
+            <el-tooltip class="item" effect="dark" content="仅可查看上传图片和点赞" placement="top" v-if="disabledOption">
+                <i class="el-icon-warning-outline"></i>
+              </el-tooltip>
+          </template>
+      </el-page-header>
     </div>
     <div class="edit-body">
         <el-form ref="form" :model="form" label-width="80px" :rules="rules">
@@ -27,25 +28,22 @@
               <el-input type="textarea" v-model="form.detail" :rows="6" placeholder="请描述下具体内容" maxlength="300" show-word-limit :disabled="disabledOption"></el-input>
             </el-form-item>
             <el-form-item label="上传">
-                <!-- <el-upload
+                <el-upload
+                :disabled="disabledOption"
                 action="#"
                 :limit="5"
                 ref="upload"
+                :on-change="handleChange"
+                :on-exceed="Exceed"
                 :multiple="true"
                 :auto-upload="false"
+                :on-preview="handlePictureCardPreview"
+                accept=".jpg,.jpeg,.png"
                 :file-list="fileList"
                 list-type="picture-card">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <div slot="tip" class="el-upload__tip">上传图片大小不超过500kb</div>
-            </el-upload> -->
-                <el-upload
-                action="/api/upload"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :file-list="fileList"
-                :on-remove="handleRemove">
                 <i class="el-icon-plus"></i>
-              </el-upload>
+                <div slot="tip" class="el-upload__tip">上传图片大小不超过2M/仅支持png,jpg,jpeg格式/最多上传5张图片</div>
+            </el-upload>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit('form')" v-if="title==='新建'" size="mini">立即创建</el-button>
@@ -98,8 +96,22 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let _self = this
-          this.form.id = this.id
-          let res = await HttpRecord.updateRecordById(this.form)
+          const fileArray = this.$refs.upload.uploadFiles
+          const formData = new FormData()
+          const fileneed = fileArray.filter((elem, index) => {
+            return elem.status === 'ready'
+          })
+          for (let i = 0; i < fileneed.length; i++) {
+            // 在这里数组每一项的.raw才是你需要的文件，有疑惑的可以打印到控制台看一下就清楚了
+            formData.append('img', fileneed[i].raw)
+          }
+          formData.append('title', this.form.title)
+          formData.append('type', this.form.type)
+          formData.append('detail', this.form.detail)
+          formData.append('id', this.id)
+          let res = await HttpRecord.updateRecordById(formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
           let { code, msg } = res
           if (code === 200) {
             this.$message({
@@ -120,7 +132,19 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let _self = this
-          let res = await HttpRecord.addRecord(this.form)
+          const fileArray = this.$refs.upload.uploadFiles
+          const formData = new FormData()
+          // 遍历文件数组，将所有文件存入fd中
+          for (let i = 0; i < fileArray.length; i++) {
+            // 在这里数组每一项的.raw才是你需要的文件，有疑惑的可以打印到控制台看一下就清楚了
+            formData.append('img', fileArray[i].raw)
+          }
+          formData.append('title', this.form.title)
+          formData.append('type', this.form.type)
+          formData.append('detail', this.form.detail)
+          let res = await HttpRecord.addRecord(formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
           let { code, msg } = res
           if (code === 200) {
             this.$message({
@@ -140,10 +164,28 @@ export default {
     async getDetail (id) {
       let res = await HttpRecord.getRecordById(id)
       this.form = Object.assign({}, res.data)
+      this.fileList = [...res.data.img]
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
+    },
+    Exceed (files, fileList) {
+      this.$message.error('最多上传5张图片')
+      return false
+    },
+    handleChange (file, fileList) {
+      const imgTypeAllow = file.raw.type === 'image/png' || file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg'
+      const imgSizeNotAllow = file.size / (1024 * 1024) > 2
+      if (imgSizeNotAllow) {
+        this.$message.error('上传图片大小不超过2M!')
+      }
+      if (!imgTypeAllow) {
+        this.$message.error('上传只能是png,jpg,jpeg格式!')
+      }
+      if (imgSizeNotAllow || !imgTypeAllow) {
+        fileList.splice(-1, 1)
+      }
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)

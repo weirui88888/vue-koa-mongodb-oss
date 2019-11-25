@@ -4,7 +4,7 @@
       <el-aside width="200px" class="home-aside">
           <el-avatar :size="80" :src="user.avatar" class="aside-avatar"></el-avatar>
           <div>{{dateNow}}{{user.user_name}}</div>
-          <div class="open-mouse"><el-button @click="openMouse" type="success" plain size="mini">聆听</el-button></div>
+          <div class="open-mouse"><el-button @click="openMouse" type="success" plain size="mini">发帖</el-button></div>
           <div class="login-out"><el-button @click="loginOut" type="danger" plain size="mini">退出登陆</el-button></div>
       </el-aside>
       <el-main>
@@ -35,7 +35,7 @@
             style="width: 100%">
             <el-table-column
               label="头像"
-              width="80">
+              width="70">
               <template slot-scope="scope">
                 <el-avatar :src="scope.row.avatar"></el-avatar>
               </template>
@@ -43,17 +43,10 @@
             <el-table-column
               prop="title"
               label="标题"
-              width="180">
+              width="200">
             </el-table-column>
             <el-table-column
-              label="类型"
-              width="100">
-              <template slot-scope="scope">
-                {{formatType(scope.row.type)}}
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="100"
+              width="150"
               label="创建人">
               <template slot-scope="scope">
                 <el-tag size="medium" v-if="isCurrentUser(scope.row)">{{scope.row.creater}}</el-tag>
@@ -61,21 +54,43 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="160"
+              label="类型"
+              width="55">
+              <template slot-scope="scope">
+                {{formatType(scope.row.type)}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="169"
               label="创建时间">
               <template slot-scope="scope">
                 {{formatTime(scope.row.create_time)}}
               </template>
             </el-table-column>
             <el-table-column
-              prop="hot"
-              width="120"
-              label="热度">
-            </el-table-column>
-            <el-table-column label="操作">
+              width="145"
+              label="热门程度">
               <template slot-scope="scope">
-                <el-button size="mini" @click="onEdit(scope.row)" plain type="success">详情</el-button>
-                <el-button size="mini" type="danger" plain @click="onDelete(scope.row)" v-if="isCurrentUser(scope.row)">删除</el-button>
+                  <el-rate
+                  v-model="scope.row.view"
+                  disabled
+                  >
+                </el-rate>
+              </template>
+            </el-table-column>
+            <el-table-column
+            label="操作"
+            width="200"
+            >
+              <template slot="header">
+                操作
+                <el-tooltip class="item" effect="dark" content="仅可操作当前用户的记录" placement="top">
+                  <i class="el-icon-warning-outline"></i>
+                </el-tooltip>
+              </template>
+              <template slot-scope="scope">
+                <el-button  @click="onEdit(scope.row)" type="text" size="small">详情</el-button>
+                <el-button  type="text" @click="onDelete(scope.row)" v-if="isCurrentUser(scope.row)" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -105,7 +120,8 @@ export default {
       loading: false,
       queryForm: {
         creater: '',
-        type: ''
+        type: '',
+        view: ''
       },
       pageSize: 10,
       pageNum: 1,
@@ -155,6 +171,9 @@ export default {
     }
   },
   methods: {
+    calculate (view) {
+      console.log(view)
+    },
     debounce (func, delay) {
       let timer
       return function (...args) {
@@ -194,7 +213,21 @@ export default {
       }, this.queryForm)
       let res = await HttpRecord.getRecord(params)
       this.loading = false
-      this.tableData = res.data.list || []
+      let tableData = res.data.list
+      tableData.forEach((record, index) => {
+        if (record.view < 10) {
+          record.view = 1
+        } else if (record.view < 20) {
+          record.view = 2
+        } else if (record.view < 30) {
+          record.view = 3
+        } else if (record.view < 40) {
+          record.view = 4
+        } else {
+          record.view = 5
+        }
+      })
+      this.tableData = tableData || []
       this.totalNum = res.data.total || 0
     },
     formatTime (timescape) {

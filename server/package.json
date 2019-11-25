@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@koa/multer": "^2.0.1",
     "debug": "^4.1.1",
     "gd-bmp": "^1.2.4",
     "jsonwebtoken": "^8.5.1",
@@ -17,11 +18,13 @@
     "koa-convert": "^1.2.0",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.0",
+    "koa-multer": "^1.0.2",
     "koa-onerror": "^4.1.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
     "mongoose": "^5.7.11",
+    "multer": "^1.4.2",
     "pug": "^2.0.3",
     "sha1": "^1.1.1",
     "xss": "^1.0.6"
