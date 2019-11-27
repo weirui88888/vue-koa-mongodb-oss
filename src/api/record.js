@@ -37,10 +37,16 @@ const updateRecordById = (data) => {
   return instance.post(`/api/record/updateRecordById`, data)
 }
 
+// 删除图片
+const deleteImg = (data) => {
+  return instance.post(`/api/record/deleteImg`, data)
+}
+
 export default {
   addRecord,
   getRecord,
   deleteRecord,
   getRecordById,
-  updateRecordById
+  updateRecordById,
+  deleteImg
 }

@@ -153,5 +153,24 @@ module.exports = {
         msg: '更新数据失败，服务器异常'
       }
     }
+  },
+  async deleteImg (ctx, img) {
+    let { name, id } = ctx.request.body
+    try {
+      let res = await Record.update({ _id: id }, {
+        $pull: { img: { name } }
+      })
+      if (res !== null) {
+        ctx.body = {
+          code: 200,
+          msg: '删除图片成功'
+        }
+      }
+    } catch (e) {
+      ctx.body = {
+        code: 500,
+        msg: '删除图片失败，服务器异常'
+      }
+    }
   }
 }

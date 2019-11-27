@@ -12,7 +12,7 @@
         <div class="login-form-body">
             <el-form ref="loginForm" :model="loginForm" label-width="80px" class="form-container" :rules="loginRules">
                 <el-form-item prop="user_id">
-                  <el-input v-model="loginForm.user_id" placeholder="账号" prefix-icon="el-icon-user"></el-input>
+                  <el-input v-model="loginForm.user_id" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
                 </el-form-item>
                 <el-form-item prop="user_pwd">
                   <el-input v-model="loginForm.user_pwd" placeholder="密码" prefix-icon="el-icon-lock" show-password></el-input>
@@ -23,7 +23,7 @@
                       <img :src="img_base64" alt="code" title="点击切换验证码" @click="changeCode">
                   </div>
                 </el-form-item>
-                  <el-button type="danger" class="w100" @click="login('loginForm')">登 陆</el-button>
+                  <el-button type="danger" class="w100" @click="login('loginForm')" :loading="loginStatus">登 陆</el-button>
                   <p class="toRegister"><el-link type="info" @click="goRegister">没有账号,去注册</el-link></p>
               </el-form>
         </div>
@@ -45,6 +45,7 @@ export default {
         code: '',
         code_token: ''
       },
+      loginStatus: false,
       loginRules: {
         user_id: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -61,6 +62,13 @@ export default {
     }
   },
   created () {
+    var _self = this
+    document.onkeydown = function (e) {
+      var key = window.event.keyCode
+      if (key === 13 || key === 100) {
+        _self.login('loginForm')
+      }
+    }
     this.getCode()
   },
   methods: {
@@ -81,9 +89,14 @@ export default {
       })
     },
     login (formName) {
-      let _self = this
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+          let _self = this
+          // 防止误操多点
+          if (this.loginStatus) {
+            return false
+          }
+          this.loginStatus = true
           let res = await HttpUser.login(this.loginForm)
           let { code, msg, data = {} } = res
           if (code === 200) {
@@ -93,22 +106,16 @@ export default {
               avatar: data.avatar,
               user_name: data.user_name
             })
-            this.$message({
-              message: msg,
-              type: 'success',
-              onClose (instance) {
-                _self.$router.push({
-                  path: '/'
-                })
-              }
+            this.$router.push({
+              path: '/'
             })
           } else {
-            let _self = this
             this.$message({
               message: msg,
               type: 'error',
               onClose () {
                 _self.getCode()
+                _self.loginStatus = false
                 _self.loginForm.code = ''
               }
             })
@@ -126,8 +133,8 @@ export default {
 <style>
 .itc-login-wrap {
   height: 100%;
-  background: url("../assets/bg.jpg");
-  background-size: cover;
+  background: url("../assets/bg3_4.jpg");
+  background-size: 100% 100%;
   position: relative;
 }
 .login-area {
@@ -140,7 +147,7 @@ export default {
 .login-logo {
   text-align: center;
   font-size: 25px;
-  color: #fff;
+  color: #000;
   font-family: cursive;
   font-weight: bold;
   padding: 20px 0;

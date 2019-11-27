@@ -4,7 +4,7 @@
       <el-page-header @back="goBack">
           <template slot="content">
             {{title}}
-            <el-tooltip class="item" effect="dark" content="仅可查看上传图片和点赞" placement="top" v-if="disabledOption">
+            <el-tooltip class="item" effect="dark" content="当前用户仅有查看权限" placement="top" v-if="disabledOption">
                 <i class="el-icon-warning-outline"></i>
               </el-tooltip>
           </template>
@@ -38,6 +38,7 @@
                 :multiple="true"
                 :auto-upload="false"
                 :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
                 accept=".jpg,.jpeg,.png"
                 :file-list="fileList"
                 list-type="picture-card">
@@ -46,8 +47,8 @@
             </el-upload>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSubmit('form')" v-if="title==='新建'" size="mini">立即创建</el-button>
-              <el-button type="primary" @click="onEdit('form')" v-if="title==='编辑'" size="mini" :disabled="disabledOption">更新数据</el-button>
+              <el-button type="primary" @click="onSubmit('form')" v-if="title==='新建'" size="mini" :loading="loadingAction">立即创建</el-button>
+              <el-button type="primary" @click="onEdit('form')" v-if="title==='编辑'" size="mini" :disabled="disabledOption" :loading="loadingAction">更新数据</el-button>
               <el-button @click="goBack" size="mini">取消</el-button>
             </el-form-item>
           </el-form>
@@ -70,6 +71,7 @@ export default {
         type: '',
         detail: ''
       },
+      loadingAction: false,
       rules: {
         title: [
           { required: true, message: '请输入一个新颖的标题', trigger: 'blur' }
@@ -95,6 +97,11 @@ export default {
     onEdit (formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+          // 防止误操多点
+          if (this.loadingAction) {
+            return false
+          }
+          this.loadingAction = true
           let _self = this
           const fileArray = this.$refs.upload.uploadFiles
           const formData = new FormData()
@@ -123,6 +130,7 @@ export default {
             })
           }
         } else {
+          this.loadingAction = false
           console.log('error submit!!')
           return false
         }
@@ -131,6 +139,11 @@ export default {
     onSubmit (formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+          // 防止误操多点
+          if (this.loadingAction) {
+            return false
+          }
+          this.loadingAction = true
           let _self = this
           const fileArray = this.$refs.upload.uploadFiles
           const formData = new FormData()
@@ -139,6 +152,7 @@ export default {
             // 在这里数组每一项的.raw才是你需要的文件，有疑惑的可以打印到控制台看一下就清楚了
             formData.append('img', fileArray[i].raw)
           }
+
           formData.append('title', this.form.title)
           formData.append('type', this.form.type)
           formData.append('detail', this.form.detail)
@@ -156,6 +170,7 @@ export default {
             })
           }
         } else {
+          this.loadingAction = false
           console.log('error submit!!')
           return false
         }
@@ -187,8 +202,21 @@ export default {
         fileList.splice(-1, 1)
       }
     },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
+    async handleRemove (file, fileList) {
+      // 判断是否为已上传过的图片，如果是已经上传的，执行数据库删除，否则的话，不做处理
+      if (file.status === 'success') {
+        let args = {
+          name: file.name,
+          id: this.id
+        }
+        let res = await HttpRecord.deleteImg(args)
+        if (res.code === 200) {
+          this.$message({
+            message: res.msg,
+            type: 'success'
+          })
+        }
+      }
     }
   },
   computed: {

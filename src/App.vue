@@ -6,7 +6,7 @@
 
 <style>
 body,html {
-  color: #fff;
+  color: #000;
   height: 100%;
 }
 #app {

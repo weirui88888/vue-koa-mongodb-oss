@@ -5,7 +5,7 @@
           <el-avatar :size="80" :src="user.avatar" class="aside-avatar"></el-avatar>
           <div>{{dateNow}}{{user.user_name}}</div>
           <div class="open-mouse"><el-button @click="openMouse" type="success" plain size="mini">发帖</el-button></div>
-          <div class="login-out"><el-button @click="loginOut" type="danger" plain size="mini">退出登陆</el-button></div>
+          <div class="login-out"><el-button @click="loginOut" type="danger" plain size="mini">退出</el-button></div>
       </el-aside>
       <el-main>
         <div class="main-header clearfix">
@@ -46,7 +46,7 @@
               width="200">
             </el-table-column>
             <el-table-column
-              width="150"
+              width="100"
               label="创建人">
               <template slot-scope="scope">
                 <el-tag size="medium" v-if="isCurrentUser(scope.row)">{{scope.row.creater}}</el-tag>
@@ -55,7 +55,7 @@
             </el-table-column>
             <el-table-column
               label="类型"
-              width="55">
+              width="100">
               <template slot-scope="scope">
                 {{formatType(scope.row.type)}}
               </template>
@@ -68,7 +68,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="145"
+              width="160"
               label="热门程度">
               <template slot-scope="scope">
                   <el-rate
@@ -80,7 +80,7 @@
             </el-table-column>
             <el-table-column
             label="操作"
-            width="200"
+            width="190"
             >
               <template slot="header">
                 操作

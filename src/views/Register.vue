@@ -11,20 +11,20 @@
             <div class="upload-avatar">
               <div class="upload-button">
                 <label class="upload-img-btn" for="upload-img">
-                  <i class="el-icon-plus"></i>
+                  <i class="el-icon-plus" style='color:#fff;'></i>
                 </label>
                 <input id="upload-img" type="file" @change="upload_img">
               </div>
-              <el-avatar :src="registerForm.avatar" :size="70" shape="square" v-show="registerForm.avatar"></el-avatar>
+              <el-avatar :src="registerForm.avatar" :size="70" shape="square" v-show="registerForm.avatar" style="margin-left: 10px;"></el-avatar>
             </div>
           </div>
           <div class="register-form-body">
               <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="80px" class="form-container">
                   <el-form-item prop="user_name">
-                    <el-input v-model="registerForm.user_name" placeholder="昵称" prefix-icon="el-icon-star-off"></el-input>
+                    <el-input v-model="registerForm.user_name" placeholder="昵称" prefix-icon="el-icon-star-off" maxlength="10"></el-input>
                   </el-form-item>
                   <el-form-item prop="user_id">
-                    <el-input v-model="registerForm.user_id" placeholder="账号" prefix-icon="el-icon-user"></el-input>
+                    <el-input v-model="registerForm.user_id" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
                   </el-form-item>
                   <el-form-item prop="user_pwd">
                     <el-input v-model="registerForm.user_pwd" placeholder="密码" prefix-icon="el-icon-lock" show-password></el-input>
@@ -38,7 +38,7 @@
                         <img :src="img_base64" alt="code" title="点击切换验证码" @click="changeCode">
                     </div>
                   </el-form-item>
-                    <el-button type="danger" class="w100" @click="submit('registerForm')">注 册</el-button>
+                    <el-button type="danger" class="w100" @click="submit('registerForm')" :loading="registerStatus">注 册</el-button>
                     <p class="toLogin"><el-link type="info" @click="goLogin">已有账号,去登陆</el-link></p>
                 </el-form>
           </div>
@@ -74,8 +74,11 @@ export default {
   },
   data () {
     const validatePwd = (rule, value, callback) => {
+      let reg = /^[\w_-]{6,10}$/
       if (value === '') {
         callback(new Error('请输入密码'))
+      } else if (!reg.test(value)) {
+        callback(new Error('密码长度应为6-10位、支持字母、数字、下划线、减号'))
       } else {
         if (this.registerForm.re_user_pwd !== '') {
           this.$refs.registerForm.validateField('re_user_pwd')
@@ -92,6 +95,17 @@ export default {
         callback()
       }
     }
+
+    const validateUserId = (rule, value, callback) => {
+      let reg = /^[a-zA-Z0-9_-]{6,10}$/
+      if (value === '') {
+        callback(new Error('请输入用户名'))
+      } else if (!reg.test(value)) {
+        callback(new Error('用户名长度应为6-10位、支持字母、数字、下划线、减号'))
+      } else {
+        callback()
+      }
+    }
     return {
       registerForm: {
         user_name: '',
@@ -102,6 +116,7 @@ export default {
         code_token: '',
         avatar: ''
       },
+      registerStatus: false,
       cropper_box_mark: false,
       cropperData: {
         img: '',
@@ -116,7 +131,7 @@ export default {
           { required: true, message: '请输入昵称', trigger: 'blur' }
         ],
         user_id: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
+          { validator: validateUserId, trigger: 'blur' }
         ],
         user_pwd: [
           { validator: validatePwd, trigger: 'blur' }
@@ -174,6 +189,8 @@ export default {
         if (valid) {
           if (!this.registerForm.avatar) {
             this.$message.error('别忘记上传头像')
+            this.getCode()
+            this.registerForm.code = ''
             return false
           }
           this.register()
@@ -184,30 +201,29 @@ export default {
       })
     },
     async register () {
+      if (this.registerStatus) {
+        return false
+      }
+      this.registerStatus = true
       let _self = this
       let res = await HttpUser.register(this.registerForm)
       let { code, msg, data = {} } = res
       if (code === 200) {
+        // 注册成功，将信息保存起来
         this.$store.commit('save', {
           _id: data._id,
           token: data.token,
           avatar: data.avatar,
           user_name: data.user_name
         })
-        // 注册成功，将信息保存起来
-        this.$message({
-          message: msg,
-          type: 'success',
-          onClose (instance) {
-            _self.$router.push('/index')
-          }
-        })
+        this.$router.push('/index')
       } else {
         this.$message({
           message: msg,
           type: 'error',
           onClose (instance) {
             _self.getCode()
+            _self.registerStatus = false
             _self.registerForm.code = ''
           }
         })
@@ -231,8 +247,8 @@ export default {
   <style>
   .itc-register-wrap {
     height: 100%;
-    background: url("../assets/bg.jpg");
-    background-size: cover;
+    background: url("../assets/bg3_4.jpg");
+    background-size: 100% 100%;
     position: relative;
   }
   .register-area {
@@ -245,7 +261,7 @@ export default {
   .register-logo {
     text-align: center;
     font-size: 25px;
-    color: #fff;
+    color: #000;
     font-family: cursive;
     font-weight: bold;
     padding: 20px 0;
@@ -283,7 +299,6 @@ export default {
   }
   .upload-avatar .upload-button {
     display: inline-block;
-    margin-right: 10px;
   }
   .upload-avatar .upload-button .upload-img-btn{
     border: 2px dashed #d9d9d9;

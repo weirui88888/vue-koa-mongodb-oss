@@ -19,5 +19,6 @@ router.post('/api/record/getRecord', controller.record.getRecord)// 添加记录
 router.delete('/api/record/deleteRecord/:id', controller.record.deleteRecord)// 添加记录
 router.get('/api/record/getRecordById/:id', controller.record.getRecordById)// 获取记录根据id
 router.post('/api/record/updateRecordById', upload.array('img', 5), controller.record.updateRecordById)// 更新记录
+router.post('/api/record/deleteImg', controller.record.deleteImg)// 删除图片
 
 module.exports = router
