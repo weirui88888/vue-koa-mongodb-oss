@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@koa/multer": "^2.0.1",
+    "ali-oss": "^6.2.1",
     "debug": "^4.1.1",
     "gd-bmp": "^1.2.4",
     "jsonwebtoken": "^8.5.1",

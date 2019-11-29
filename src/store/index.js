@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-14 19:15:39
- * @Email: weirui@zhiketong.cn
- */
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import User from './module/user'
@@ -13,10 +7,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {
-      _id: window.sessionStorage.getItem('_id') || '',
-      user_name: window.sessionStorage.getItem('user_name') || '',
-      token: window.sessionStorage.getItem('token') || '',
-      avatar: window.sessionStorage.getItem('avatar') || ''
+      _id: window.localStorage.getItem('_id') || '',
+      user_name: window.localStorage.getItem('user_name') || '',
+      token: window.localStorage.getItem('token') || '',
+      avatar: window.localStorage.getItem('avatar') || ''
     }
   },
   mutations: {
@@ -26,10 +20,10 @@ export default new Vuex.Store({
       state.user.user_name = data.user_name
       state.user.avatar = data.avatar
 
-      window.sessionStorage.setItem('_id', data._id)
-      window.sessionStorage.setItem('token', data.token)
-      window.sessionStorage.setItem('user_name', data.user_name)
-      window.sessionStorage.setItem('avatar', data.avatar)
+      window.localStorage.setItem('_id', data._id)
+      window.localStorage.setItem('token', data.token)
+      window.localStorage.setItem('user_name', data.user_name)
+      window.localStorage.setItem('avatar', data.avatar)
     },
     remove (state, data) {
       state.user._id = ''
@@ -37,10 +31,10 @@ export default new Vuex.Store({
       state.user.user_name = ''
       state.user.avatar = ''
 
-      window.sessionStorage.removeItem('_id')
-      window.sessionStorage.removeItem('token')
-      window.sessionStorage.removeItem('user_name')
-      window.sessionStorage.removeItem('avatar')
+      window.localStorage.removeItem('_id')
+      window.localStorage.removeItem('token')
+      window.localStorage.removeItem('user_name')
+      window.localStorage.removeItem('avatar')
     }
   },
   actions: {

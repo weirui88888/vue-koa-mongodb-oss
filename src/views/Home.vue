@@ -23,6 +23,23 @@
               <el-form-item label="创建人">
                 <el-input v-model="queryForm.creater" placeholder="请输入创建人名字" size="small" clearable></el-input>
               </el-form-item>
+              <el-form-item label="热门指数">
+                  <el-select v-model="queryForm.view" placeholder="请选择" size="small" clearable>
+                      <el-option
+                        v-for="item in hotViews"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        <span style="float: left">{{ item.label }}</span>
+                        <span class="rate-wrap">
+                            <el-rate
+                            v-model="item.value"
+                            disabled>
+                          </el-rate>
+                        </span>
+                      </el-option>
+                    </el-select>
+              </el-form-item>
             </el-form>
         </div>
         <div class="main-body">
@@ -34,19 +51,16 @@
             :data="tableData"
             style="width: 100%">
             <el-table-column
-              label="头像"
-              width="70">
+              label="头像">
               <template slot-scope="scope">
                 <el-avatar :src="scope.row.avatar"></el-avatar>
               </template>
             </el-table-column>
             <el-table-column
               prop="title"
-              label="标题"
-              width="200">
+              label="标题">
             </el-table-column>
             <el-table-column
-              width="100"
               label="创建人">
               <template slot-scope="scope">
                 <el-tag size="medium" v-if="isCurrentUser(scope.row)">{{scope.row.creater}}</el-tag>
@@ -54,22 +68,19 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="类型"
-              width="100">
+              label="类型">
               <template slot-scope="scope">
                 {{formatType(scope.row.type)}}
               </template>
             </el-table-column>
             <el-table-column
-              width="169"
               label="创建时间">
               <template slot-scope="scope">
                 {{formatTime(scope.row.create_time)}}
               </template>
             </el-table-column>
             <el-table-column
-              width="160"
-              label="热门程度">
+              label="热门指数">
               <template slot-scope="scope">
                   <el-rate
                   v-model="scope.row.view"
@@ -80,7 +91,6 @@
             </el-table-column>
             <el-table-column
             label="操作"
-            width="190"
             >
               <template slot="header">
                 操作
@@ -98,6 +108,7 @@
         <div class="main-footer">
           <el-pagination
             background
+            ref="pagination"
             :page-size="pageSize"
             @current-change="pageChange"
             layout="prev, pager, next, total"
@@ -126,6 +137,28 @@ export default {
       pageSize: 10,
       pageNum: 1,
       totalNum: 0,
+      hotViews: [
+        {
+          value: 1,
+          label: '青铜'
+        },
+        {
+          value: 2,
+          label: '白银'
+        },
+        {
+          value: 3,
+          label: '黄金'
+        },
+        {
+          value: 4,
+          label: '大师'
+        },
+        {
+          value: 5,
+          label: '王者'
+        }
+      ],
       types: [
         {
           value: '',
@@ -167,13 +200,21 @@ export default {
   },
   watch: {
     'queryForm.type' () {
-      this.getRecord()
+      this.pageChange(1)
+      // 处理分页bug,强制更新element分页的页码
+      // 详情可见https://blog.csdn.net/weixin_42612454/article/details/87949537
+      this.$nextTick(() => {
+        this.$refs.pagination.internalCurrentPage = 1
+      })
+    },
+    'queryForm.view' () {
+      this.pageChange(1)
+      this.$nextTick(() => {
+        this.$refs.pagination.internalCurrentPage = 1
+      })
     }
   },
   methods: {
-    calculate (view) {
-      console.log(view)
-    },
     debounce (func, delay) {
       let timer
       return function (...args) {
@@ -305,10 +346,18 @@ export default {
   margin-right: 20px;
 }
 .main-body{
-  padding: 0 130px 0 40px;
+  padding-left: 40px;
   margin-top: 30px;
 }
 .main-footer {
   padding:20px 30px;
+}
+.rate-wrap {
+  float: right;
+  font-size: 13px;
+  padding: 8px 0;
+}
+.rate-wrap .el-rate__icon {
+  margin-right: 0;
 }
 </style>

@@ -48,6 +48,20 @@ instance.interceptors.response.use(
           }
         })
         return Promise.reject(err.response)
+      } else {
+        $message({
+          message: '出错了，请重新登陆',
+          type: 'error',
+          onClose () {
+            store.commit('remove') // token过期,清除
+            router.replace({ // 跳转到登录页面
+              path: '/login',
+              // 添加一个重定向后缀，等登录以后再到这里来
+              query: { redirect: router.currentRoute.fullPath }
+            })
+          }
+        })
+        return Promise.reject(err.response)
       }
     } else {
       console.log(err)
