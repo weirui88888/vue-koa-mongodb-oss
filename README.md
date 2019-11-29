@@ -12,7 +12,8 @@
 
 **建议参考本文最后教程，将项目克隆到本地启动，配合该篇文章进行阅读**
 
-![赞](https://user-gold-cdn.xitu.io/2019/11/28/16eb1290c3de2e9c?w=728&h=158&f=png&s=3552)
+![star](https://user-gold-cdn.xitu.io/2019/11/29/16eb7bb01a8f4894?w=728&h=104&f=png&s=3307)
+
 ## 效果图
 ### 注册
 ![注册](https://user-gold-cdn.xitu.io/2019/11/28/16eb104dd075f22b?w=1904&h=956&f=jpeg&s=149213)
@@ -285,8 +286,7 @@ server {
 
 写在文章的最后，如果这篇文章，给你启示或是成长，请为我点亮一颗小红心。**程序员，码字不易，谢谢**。
 
-![赞](https://user-gold-cdn.xitu.io/2019/11/28/16eb1290c3de2e9c?w=728&h=158&f=png&s=3552)
-
+![star](https://user-gold-cdn.xitu.io/2019/11/29/16eb7bb01a8f4894?w=728&h=104&f=png&s=3307) 
 
 ## 参考
 
@@ -296,13 +296,8 @@ server {
 
 [PM2入门](https://wohugb.gitbooks.io/pm2/content/deployment/getting_started_with_deployment.html)
 
-
 [Mongo API](https://docs.mongodb.com/manual/reference/method/js-collection/)
 
 [前端想要了解的Nginx](https://juejin.im/post/5cae9de95188251ae2324ec3#heading-6)
 
 [Nginx与前端开发](https://juejin.im/post/5bacbd395188255c8d0fd4b2)
-
-
-
-
