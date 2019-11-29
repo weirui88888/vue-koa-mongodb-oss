@@ -2,17 +2,13 @@
 
 由于使用Element框架实现前端，并没有做移动端适配，所以建议PC端观看。
 
-文章最后，我也会跟大家说如何在本地跑起来项目（不需要任何阿里云系列产品即可本地启动）
-
 **线上地址：**[GITHUB](https://github.com/weirui88888/itc)
 
 **项目地址：**[GITHUB](https://github.com/weirui88888/itc)
 
-欢迎`star`和`fork`,谢谢。
+![thanks](https://user-gold-cdn.xitu.io/2019/11/29/16eb7c8c1e344b77?w=728&h=104&f=png&s=1052)
+**建议参考本文最后教程，将项目克隆到本地启动（不需要任何阿里云系列产品即可本地启动），配合该篇文章进行阅读**
 
-**建议参考本文最后教程，将项目克隆到本地启动，配合该篇文章进行阅读**
-
-![star](https://user-gold-cdn.xitu.io/2019/11/29/16eb7bb01a8f4894?w=728&h=104&f=png&s=3307)
 
 ## 效果图
 ### 注册
@@ -246,11 +242,9 @@ server {
 2.  ./nginx -s reload
 ```
 
-
 ## 本地启动
 
 首先你本地要全局安装了mongodb、node、npm、robo3T等相关工具，本地启动mongodb
-
 
 ```
 1.git clone https://github.com/weirui88888/itc.git 把项目克隆到本地
@@ -287,7 +281,6 @@ server {
 写在文章的最后，如果这篇文章，给你启示或是成长，请为我点亮一颗小红心。**程序员，码字不易，谢谢**。
 
 ![star](https://user-gold-cdn.xitu.io/2019/11/29/16eb7bb01a8f4894?w=728&h=104&f=png&s=3307) 
-
 ## 参考
 
 [VUE+KOA+MONGODB小练习](https://juejin.im/post/5ba0a27b5188255c6a043058)
