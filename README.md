@@ -13,7 +13,7 @@
 
 ## 效果图
 ### 注册
-![注册](https://user-gold-cdn.xitu.io/2019/11/28/16eb104dd075f22b?w=1904&h=956&f=jpeg&s=149213)
+![注册](https://user-gold-cdn.xitu.io/2019/11/30/16eb7ede52f3489f?w=1904&h=956&f=jpeg&s=149213)
 
 ---
 ### 登陆
