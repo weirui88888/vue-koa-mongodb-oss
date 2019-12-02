@@ -43,7 +43,7 @@
                 :file-list="fileList"
                 list-type="picture-card">
                 <i class="el-icon-plus"></i>
-                <div slot="tip" class="el-upload__tip">上传图片大小不超过2M/仅支持png,jpg,jpeg格式/最多上传5张图片</div>
+                <div slot="tip" class="el-upload__tip">上传图片大小不超过1M/仅支持png,jpg,jpeg格式/最多上传5张图片</div>
             </el-upload>
             </el-form-item>
             <el-form-item>
@@ -191,9 +191,9 @@ export default {
     },
     handleChange (file, fileList) {
       const imgTypeAllow = file.raw.type === 'image/png' || file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg'
-      const imgSizeNotAllow = file.size / (1024 * 1024) > 2
+      const imgSizeNotAllow = file.size / (1024 * 1024) > 1
       if (imgSizeNotAllow) {
-        this.$message.error('上传图片大小不超过2M!')
+        this.$message.error('上传图片大小不超过1M!')
       }
       if (!imgTypeAllow) {
         this.$message.error('上传只能是png,jpg,jpeg格式!')

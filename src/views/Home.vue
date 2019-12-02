@@ -1,5 +1,6 @@
 <template>
   <div class="home-wrap">
+      <a href="https://github.com/mabushao/vue-koa-mongodb-oss"><img width="120" height="120" style="position: fixed; top: 0; right: 0; border: 0; z-index: 2000;" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
     <el-container>
       <el-aside width="200px" class="home-aside">
           <el-avatar :size="80" :src="user.avatar" class="aside-avatar"></el-avatar>
@@ -51,6 +52,7 @@
             :data="tableData"
             style="width: 100%">
             <el-table-column
+              width="70"
               label="头像">
               <template slot-scope="scope">
                 <el-avatar :src="scope.row.avatar"></el-avatar>
@@ -68,6 +70,7 @@
               </template>
             </el-table-column>
             <el-table-column
+              width="60"
               label="类型">
               <template slot-scope="scope">
                 {{formatType(scope.row.type)}}
@@ -91,6 +94,7 @@
             </el-table-column>
             <el-table-column
             label="操作"
+            width="100"
             >
               <template slot="header">
                 操作
