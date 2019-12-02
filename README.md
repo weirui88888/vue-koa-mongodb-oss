@@ -2,11 +2,13 @@
 
 由于使用Element框架实现前端，并没有做移动端适配，所以建议PC端观看。
 
-**线上地址：**[GITHUB](https://github.com/weirui88888/itc)
+**线上地址：**[itc](http://123.56.119.218/login)
 
 **项目地址：**[GITHUB](https://github.com/weirui88888/itc)
 
 ![star](https://user-gold-cdn.xitu.io/2019/11/30/16eb7fbf98cdd740?w=728&h=86&f=png&s=1558)
+
+由于作者阿里云域名**正在备案**，当前小伙伴只能通过ip地址进行访问，后续备案通过后，会替换成域名访问形式。
 
 **建议参考本文最后[教程](https://github.com/weirui88888/itc#%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8)，将项目克隆到本地启动（不需要任何阿里云系列产品即可本地启动），配合该篇文章进行阅读**
 
@@ -273,7 +275,7 @@ server {
 
 这是我第一次写一个完整的前后端应用并部署服务器，所以难免程序中，会存在一些瑕疵，望包含。同时如果有一些疑惑点或者是建议，可以提`issue`，也可以发邮件`call`我。
 
-**线上地址：**[GITHUB](https://github.com/weirui88888/itc)
+**线上地址：**[itc](http://123.56.119.218/login)
 
 **项目地址：**[GITHUB](https://github.com/weirui88888/itc)
 
