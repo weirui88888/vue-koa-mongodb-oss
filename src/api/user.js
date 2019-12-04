@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-17 20:10:41
- * @Email: weirui@zhiketong.cn
- */
 import instance from '../request/axios'
 
 // 注册

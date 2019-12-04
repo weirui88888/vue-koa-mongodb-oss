@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-15 10:29:11
- * @Email: weirui@zhiketong.cn
- */
 const router = require('koa-router')()
 const upload = require('../utils/upload')
 const controller = require('../controller')

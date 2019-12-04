@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-14 19:15:39
- * @Email: weirui@zhiketong.cn
- */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'

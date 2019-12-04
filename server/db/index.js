@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-15 10:49:10
- * @Email: weirui@zhiketong.cn
- */
 const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 

@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-15 11:29:28
- * @Email: weirui@zhiketong.cn
- */
 module.exports = {
   // token 加密字符串,
   TOKEN_ENCODE_STR: 'itc_token_encode_str',

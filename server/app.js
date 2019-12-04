@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Autor: rui.wei
- * @Date: 2019-11-15 10:29:11
- * @Email: weirui@zhiketong.cn
- */
 const Koa = require('koa')
 const app = new Koa()
 const json = require('koa-json')
