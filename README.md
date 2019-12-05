@@ -2,7 +2,7 @@
 
 由于使用Element框架实现前端，并没有做移动端适配，所以建议PC端观看。
 
-**线上地址：**[itc](http://123.56.119.218/index)
+**线上地址：**[itc](http://itc.newarray.vip/index)
 
 **项目地址：**[GITHUB](https://github.com/weirui88888/itc)
 
@@ -275,7 +275,7 @@ server {
 
 这是我第一次写一个完整的前后端应用并部署服务器，所以难免程序中，会存在一些瑕疵，望包含。同时如果有一些疑惑点或者是建议，可以提`issue`，也可以发邮件`call`我。
 
-**线上地址：**[itc](http://123.56.119.218/index)
+**线上地址：**[itc](http://itc.newarray.vip/index)
 
 **项目地址：**[GITHUB](https://github.com/weirui88888/itc)
 
