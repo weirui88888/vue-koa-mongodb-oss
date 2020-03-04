@@ -29,14 +29,19 @@
         </div>
       </div>
     </div>
+    <common-footer></common-footer>
   </div>
 </template>
 
 <script>
 import HttpCode from '../api/code'
 import HttpUser from '../api/user'
+import commonFooter from './Footer'
 export default {
   name: 'login',
+  components: {
+    commonFooter
+  },
   data () {
     return {
       loginForm: {
