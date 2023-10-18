@@ -16,25 +16,24 @@ module.exports = {
     hot: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true
+        target: 'http://localhost:3100',
+        changeOrigin: true,
+        secure: false
       }
     }
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     // npm run analyzer 找出占用程序控件的插件，可以进行优化
-    if (process.env.use_analyzer) { // 分析
-      config
-        .plugin('webpack-bundle-analyzer')
-        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    if (process.env.use_analyzer) {
+      // 分析
+      config.plugin('webpack-bundle-analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
     }
     if (isProduction) {
       // 生产环境注入cdn
-      config.plugin('html')
-        .tap(args => {
-          args[0].cdn = cdn
-          return args
-        })
+      config.plugin('html').tap((args) => {
+        args[0].cdn = cdn
+        return args
+      })
     }
 
     // 移除 prefetch 插件
@@ -42,14 +41,14 @@ module.exports = {
     // 移除 preload 插件
     config.plugins.delete('preload')
   },
-  configureWebpack: config => {
+  configureWebpack: (config) => {
     if (isProduction) {
       // 用cdn方式引入
       config.externals = {
-        'vue': 'Vue',
-        'vuex': 'Vuex',
+        vue: 'Vue',
+        vuex: 'Vuex',
         'vue-router': 'VueRouter',
-        'axios': 'axios'
+        axios: 'axios'
       }
     }
   }

@@ -35,5 +35,8 @@
     "gh-pages": "^2.1.1",
     "vue-template-compiler": "^2.6.10",
     "webpack-bundle-analyzer": "^3.6.0"
+  },
+  "volta": {
+    "node": "16.18.0"
   }
 }

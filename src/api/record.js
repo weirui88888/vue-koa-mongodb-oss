@@ -2,13 +2,11 @@ import instance from '../request/axios'
 
 // 添加记录
 const addRecord = (data) => {
-  return instance.request(
-    {
-      url: '/api/record/add',
-      data: data,
-      method: 'post'
-    }
-  )
+  return instance.request({
+    url: '/api/record/add',
+    data: data,
+    method: 'post'
+  })
 }
 
 // 查看记录
@@ -28,12 +26,12 @@ const getRecordById = (id) => {
 
 // 更新数据
 const updateRecordById = (data) => {
-  return instance.post(`/api/record/updateRecordById`, data)
+  return instance.post('/api/record/updateRecordById', data)
 }
 
 // 删除图片
 const deleteImg = (data) => {
-  return instance.post(`/api/record/deleteImg`, data)
+  return instance.post('/api/record/deleteImg', data)
 }
 
 export default {
