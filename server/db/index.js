@@ -1,14 +1,13 @@
 const mongoose = require('mongoose')
-mongoose.set('useFindAndModify', false)
-
-mongoose.connect('mongodb://localhost:27017/itc', { useNewUrlParser: true }, function (err) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log('Connection success!')
-  }
-})
 const Schema = mongoose.Schema
+
+mongoose.connect(`mongodb://localhost:27017/${process.env.DATA_BASE_NAME}`)
+
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connect error:'))
+db.once('open', function () {
+  console.log('connect database successful!')
+})
 
 // 验证码
 let checkcodeSchema = new Schema({
@@ -42,7 +41,6 @@ let recordSchema = new Schema({
   img: Array,
   view: 0,
   creater: String,
-  // TODO:这里很重要，需要什么记得加上
   avatar: String,
   user_id: {
     type: mongoose.Schema.ObjectId,
@@ -50,6 +48,6 @@ let recordSchema = new Schema({
   }
 })
 
-exports.CheckCode = mongoose.model('Checkcode', checkcodeSchema)
-exports.User = mongoose.model('User', userSchema)
-exports.Record = mongoose.model('Record', recordSchema)
+exports.CheckCode = mongoose.model('Checkcode', checkcodeSchema, 'Checkcode')
+exports.User = mongoose.model('User', userSchema, 'User')
+exports.Record = mongoose.model('Record', recordSchema, 'Record')

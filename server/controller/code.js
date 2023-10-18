@@ -2,9 +2,8 @@ const CheckCode = require('../db').CheckCode
 const BMP24 = require('gd-bmp').BMP24
 const { create_token } = require('../utils/token')
 module.exports = {
-  async getCode (ctx, next) {
+  async getCode(ctx, next) {
     let { code, img } = makeCapcha()
-
     let token = create_token(code)
 
     await new CheckCode({ token, code }).save()
@@ -21,12 +20,12 @@ module.exports = {
 }
 
 // 仿PHP的rand函数
-function rand (min, max) {
-  return Math.random() * (max - min + 1) + min | 0 // 特殊的技巧，|0可以强制转换为整数
+function rand(min, max) {
+  return (Math.random() * (max - min + 1) + min) | 0 // 特殊的技巧，|0可以强制转换为整数
 }
 
 // 制造验证码图片
-function makeCapcha () {
+function makeCapcha() {
   let img = new BMP24(100, 40)
   img.drawCircle(rand(0, 100), rand(0, 40), rand(10, 40), rand(0, 0xffffff))
   // 边框
@@ -45,7 +44,7 @@ function makeCapcha () {
   let h3 = rand(4, 6) // 数值越小幅度越大
   let bl = rand(1, 5)
   for (let i = -w; i < w; i += 0.1) {
-    let y = Math.floor(h / h3 * Math.sin(i / w2) + h / 2 + y1)
+    let y = Math.floor((h / h3) * Math.sin(i / w2) + h / 2 + y1)
     let x = Math.floor(i + w)
     for (let j = 0; j < bl; j++) {
       img.drawPoint(x, y + j, color)
@@ -55,13 +54,14 @@ function makeCapcha () {
   let p = 'ABCDEFGHKMNPQRSTUVWXYZ3456789'
   let str = ''
   for (let i = 0; i < 4; i++) {
-    str += p.charAt(Math.random() * p.length | 0)
+    str += p.charAt((Math.random() * p.length) | 0)
   }
 
   let fonts = [BMP24.font8x16, BMP24.font12x24, BMP24.font16x32]
-  let x = 15; let y = 8
+  let x = 15
+  let y = 8
   for (let i = 0; i < str.length; i++) {
-    let f = fonts[Math.random() * fonts.length | 0]
+    let f = fonts[(Math.random() * fonts.length) | 0]
     y = 8 + rand(-10, 10)
     img.drawChar(str[i], x, y, f, rand(0, 0xffffff))
     x += f.w + rand(2, 8)

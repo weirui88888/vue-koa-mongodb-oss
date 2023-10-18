@@ -15,7 +15,7 @@ const path = require('path')
 // })
 
 module.exports = {
-  async addRecord (ctx, next) {
+  async addRecord(ctx, next) {
     let { title, type, detail } = ctx.request.body
     let files = ctx.request.files
     let img = []
@@ -25,7 +25,7 @@ module.exports = {
         name: elem.originalname,
         // url: 'https://mbs-itc.oss-cn-beijing.aliyuncs.com/images/' + elem.originalname // 1.使用图片上传阿里云,前提是你开通了阿里云对象存储，也创建了bucket（适合开通服务器，并且开通阿里云对象存储的人群）
         // url: 'http://123.56.119.218/server/public/images/' + elem.originalname // 2.图片上传nginx服务器（用nginx服务器存放静态资源，适合开通服务器，没有开通阿里云对象存储的人群）
-        url: 'http://localhost:3000/images/' + elem.originalname // 3.本地开发，图片上传到本地server/public目录中的images文件夹（适合本地启动，即没有开通任何阿里云服务产品）
+        url: `http://localhost:${process.env.PORT}/images/` + elem.originalname // 3.本地开发，图片上传到本地server/public目录中的images文件夹（适合本地启动，即没有开通任何阿里云服务产品）
       })
     })
 
@@ -69,13 +69,13 @@ module.exports = {
       }
     }
   },
-  async getRecord (ctx, next) {
+  async getRecord(ctx, next) {
     let { pageSize, pageNum, type, creater, view } = ctx.request.body
     // 分页
     let options = {
       skip: Number((pageNum - 1) * pageSize),
       limit: Number(pageSize),
-      sort: { 'create_time': '-1' }
+      sort: { create_time: '-1' }
     }
     let queryParam = {}
     if (type) {
@@ -107,7 +107,7 @@ module.exports = {
       msg: '获取数据成功'
     }
   },
-  async deleteRecord (ctx, next) {
+  async deleteRecord(ctx, next) {
     let _id = ctx.params.id
     try {
       let res = await Record.findOneAndDelete({ _id })
@@ -130,11 +130,11 @@ module.exports = {
       }
     }
   },
-  async getRecordById (ctx, next) {
+  async getRecordById(ctx, next) {
     let _id = ctx.params.id
     try {
       // let res = await Record.findOne({ _id }, { detail: true, title: true, type: true, _id: false, img: true })
-      let res = await Record.findOneAndUpdate({ _id }, { $inc: { 'view': 1 } }, { returnNewDocument: true })
+      let res = await Record.findOneAndUpdate({ _id }, { $inc: { view: 1 } }, { returnNewDocument: true })
       ctx.body = {
         code: 200,
         msg: '获取详情成功!',
@@ -147,7 +147,7 @@ module.exports = {
       }
     }
   },
-  async updateRecordById (ctx, next) {
+  async updateRecordById(ctx, next) {
     let { id, detail, type, title } = ctx.request.body
     let files = ctx.request.files
     let img = []
@@ -157,7 +157,7 @@ module.exports = {
         name: elem.originalname,
         // url: 'https://mbs-itc.oss-cn-beijing.aliyuncs.com/images/' + elem.originalname // 1.使用图片上传阿里云,前提是你开通了阿里云对象存储，也创建了bucket（适合开通服务器，并且开通阿里云对象存储的人群）
         // url: 'http://123.56.119.218/server/public/images/' + elem.originalname // 2.图片上传nginx服务器（用nginx服务器存放静态资源，适合开通服务器，没有开通阿里云对象存储的人群）
-        url: 'http://localhost:3000/images/' + elem.originalname // 3.本地开发，图片上传到本地server/public目录中的images文件夹（适合本地启动，即没有开通任何阿里云服务产品）
+        url: `http://localhost:${process.env.PORT}/images/` + elem.originalname // 3.本地开发，图片上传到本地server/public目录中的images文件夹（适合本地启动，即没有开通任何阿里云服务产品）
       })
     })
 
@@ -167,14 +167,18 @@ module.exports = {
     // })
 
     try {
-      let res = await Record.findOneAndUpdate({ _id: id }, {
-        $set: {
-          detail,
-          type,
-          title
+      let res = await Record.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            detail,
+            type,
+            title
+          },
+          $addToSet: { img }
         },
-        $addToSet: { img }
-      }, { new: true })
+        { new: true }
+      )
       if (res !== null) {
         ctx.body = {
           code: 200,
@@ -188,12 +192,15 @@ module.exports = {
       }
     }
   },
-  async deleteImg (ctx, img) {
+  async deleteImg(ctx, img) {
     let { name, id } = ctx.request.body
     try {
-      let res = await Record.update({ _id: id }, {
-        $pull: { img: { name } }
-      })
+      let res = await Record.update(
+        { _id: id },
+        {
+          $pull: { img: { name } }
+        }
+      )
       if (res !== null) {
         ctx.body = {
           code: 200,

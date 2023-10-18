@@ -13,23 +13,17 @@ const index = require('./routes/index')
 onerror(app)
 
 // middlewares
-app.use(bodyparser({
-  enableTypes: ['json', 'form', 'text']
-}))
+app.use(
+  bodyparser({
+    enableTypes: ['json', 'form', 'text']
+  })
+)
 // 添加token 验证中间件
 app.use(check_token)
 
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(path.resolve(__dirname, './public')))
-
-// logger
-app.use(async (ctx, next) => {
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
 
 // routes
 app.use(index.routes(), index.allowedMethods())
